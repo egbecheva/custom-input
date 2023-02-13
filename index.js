@@ -7,20 +7,30 @@ let listItems = optionsArray.map((element, index) => {
   if (index <= maxOptions) {
     finalArray = [
       ...finalArray,
-      '<div class="not-displayed dropdown-item">' + element + '</div>',
+      `<li value=${element} class="not-displayed dropdown-item"> ${element} </li>`,
     ];
   }
   if (index > maxOptions) {
     finalArray = [
       ...finalArray,
-      '<div class="dropdown-item">' + element + '</div>',
+      `<li value=${element} class="dropdown-item"> ${element} </li>`,
     ];
   }
 
   return finalArray;
 });
 const htmlList = finalArray.join('');
-const dqdo = (arr) => {
+const appendInputOptions = (arr) => {
   document.getElementById('dropdown-content').innerHTML += arr;
 };
-dqdo(htmlList);
+appendInputOptions(htmlList);
+
+const handleClick = (i) => {
+  console.log(i.getAttribute('value'));
+};
+
+const baba = document.querySelectorAll('.dropdown-item');
+
+baba.forEach((element, i) =>
+  element.addEventListener('click', () => handleClick(element))
+);
