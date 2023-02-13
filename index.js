@@ -25,12 +25,14 @@ const appendInputOptions = (arr) => {
 };
 appendInputOptions(htmlList);
 
-const handleClick = (i) => {
-  console.log(i.getAttribute('value'));
+const handleMouseOver = (element) => {
+  const input = document.getElementById('inputField');
+  const selectedValue = element.getAttribute('value');
+  input.value = selectedValue;
 };
 
-const baba = document.querySelectorAll('.dropdown-item');
+const dropDownList = document.querySelectorAll('.dropdown-item');
 
-baba.forEach((element, i) =>
-  element.addEventListener('click', () => handleClick(element))
+dropDownList.forEach((element) =>
+  element.addEventListener('mouseover', () => handleMouseOver(element))
 );
