@@ -48,9 +48,7 @@ dropdownList.forEach((element, i, arr) =>
   element.addEventListener('mouseover', () => handleMouseOver(element, i, arr))
 );
 
-const displayedOptions = Array.from(
-  document.querySelectorAll('.displayed', console.log())
-);
+const displayedOptions = Array.from(document.querySelectorAll('.displayed'));
 
 let stringToHTML = (str) => {
   let parser = new DOMParser();
@@ -65,31 +63,21 @@ const handleArrowKeys = () => {
   let selectedValue = stringToHTML(
     finalDropdownOptions[firsAvailableIndex]
   ).getAttribute('value');
-  console.log('initial selectedValue', selectedValue);
-  console.log('initial type of selectedValue', typeof selectedValue);
 
   document.onkeydown = (event) => {
-    if (event.key === 'ArrowUp') {
+    if (event.key === 'ArrowUp' && i > 0) {
       i = i - 1;
 
       selectedValue = stringToHTML(finalDropdownOptions[i]).getAttribute(
         'value'
       );
-      console.log('selectedValue after keyup', selectedValue);
-      console.log('type of selectedValue after keyup', typeof selectedValue);
-
       input.value = selectedValue;
     }
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown' && i < optionsArrayLength - 1) {
       i = i + 1;
-
       selectedValue = stringToHTML(finalDropdownOptions[i]).getAttribute(
         'value'
       );
-
-      console.log('selectedValue after keydown', selectedValue);
-      console.log('type of selectedValue after keydown', typeof selectedValue);
-
       input.value = selectedValue;
     }
   };
