@@ -52,29 +52,44 @@ const displayedOptions = Array.from(
   document.querySelectorAll('.displayed', console.log())
 );
 
+let stringToHTML = (str) => {
+  let parser = new DOMParser();
+  let doc = parser.parseFromString(str, 'text/html');
+  return doc.body.firstChild;
+};
+
 //Handle arrow keys
 const handleArrowKeys = () => {
-  let firsAvailableIndex = optionsArrayLength - MAX_OPTIONS;
+  let firsAvailableIndex = optionsArrayLength - MAX_OPTIONS - 1;
   let i = firsAvailableIndex;
-  console.log('displayedOptions', displayedOptions);
+  let selectedValue = stringToHTML(
+    finalDropdownOptions[firsAvailableIndex]
+  ).getAttribute('value');
+  console.log('initial selectedValue', selectedValue);
+  console.log('initial type of selectedValue', typeof selectedValue);
 
   document.onkeydown = (event) => {
-    let selectedValue = finalDropdownOptions[firsAvailableIndex];
     if (event.key === 'ArrowUp') {
-      console.log('up');
       i = i - 1;
-      console.log('i', i);
 
-      selectedValue = finalDropdownOptions[i];
+      selectedValue = stringToHTML(finalDropdownOptions[i]).getAttribute(
+        'value'
+      );
+      console.log('selectedValue after keyup', selectedValue);
+      console.log('type of selectedValue after keyup', typeof selectedValue);
+
       input.value = selectedValue;
     }
     if (event.key === 'ArrowDown') {
-      console.log('down');
-
       i = i + 1;
-      console.log('i', i);
 
-      selectedValue = finalDropdownOptions[i];
+      selectedValue = stringToHTML(finalDropdownOptions[i]).getAttribute(
+        'value'
+      );
+
+      console.log('selectedValue after keydown', selectedValue);
+      console.log('type of selectedValue after keydown', typeof selectedValue);
+
       input.value = selectedValue;
     }
   };
