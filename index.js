@@ -129,6 +129,6 @@ console.log('called from magic function', finalDropdownOptions);
 console.log('li', document.querySelectorAll('.dropdown-item'));
 
 input.addEventListener('focusin', () => handleArrowKeys());
-// input.addEventListener('focusout', () => {
-//   highlighter('', 0, true);
-// });
+input.addEventListener('focusout', () => {
+  highlighter('', 0, true);
+});
