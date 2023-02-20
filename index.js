@@ -34,9 +34,13 @@ const optionsArray = [
 const optionsArrayLength = optionsArray.length;
 
 const MAX_OPTIONS = 10;
+let MIN_INDEX = optionsArrayLength - MAX_OPTIONS;
+let MAX_INDEX = MIN_INDEX + MAX_OPTIONS;
+console.log('MAX_INDEX', MAX_INDEX);
 const input = document.getElementById('inputField');
 const dropdownContent = document.getElementById('dropdown-content');
-let firsAvailableIndex = optionsArrayLength - MAX_OPTIONS;
+let i = MIN_INDEX;
+let lastItems;
 
 let finalDropdownOptions = [];
 let stringToHTML = (str) => {
@@ -49,8 +53,9 @@ let stringToHTML = (str) => {
 let selected = '';
 let renderList = (selected) =>
   optionsArray.map((element, index) => {
-    let lastItems = optionsArrayLength - index;
-    if (lastItems <= MAX_OPTIONS) {
+    lastItems = optionsArray.slice(MIN_INDEX, MAX_INDEX);
+    console.log(lastItems);
+    if (index >= MIN_INDEX && index <= MAX_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
         `<li value=${element}    class="displayed dropdown-item ${
@@ -60,7 +65,7 @@ let renderList = (selected) =>
         }"> ${element}</li>`,
       ];
     }
-    if (lastItems > MAX_OPTIONS) {
+    if (index < MIN_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
         `<li value=${element} class="not-displayed dropdown-item"> ${element} </li>`,
@@ -109,7 +114,6 @@ const highlighter = (selectedValue, i, focusedOut) => {
 //Handle arrow keys
 const handleArrowKeys = () => {
   //Highlight the top element from dropdown once the input has been focused
-  let i = firsAvailableIndex;
   let selectedValue = finalDropdownOptions[i];
   highlighter(selectedValue, i, false);
 
@@ -117,10 +121,14 @@ const handleArrowKeys = () => {
   document.onkeydown = (event) => {
     if (event.key === 'ArrowUp' && i > 0) {
       i = i - 1;
+      MIN_INDEX = i;
+      MAX_INDEX = i + MAX_OPTIONS;
       highlighter(selectedValue, i, false);
     }
     if (event.key === 'ArrowDown' && i < optionsArrayLength - 1) {
       i = i + 1;
+      MIN_INDEX = i;
+      MAX_INDEX = i + MAX_OPTIONS;
       highlighter(selectedValue, i, false);
     }
   };
