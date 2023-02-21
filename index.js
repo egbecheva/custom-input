@@ -33,10 +33,10 @@ const optionsArray = [
 
 const optionsArrayLength = optionsArray.length;
 
-const MAX_OPTIONS = 10;
-let MIN_INDEX = optionsArrayLength - MAX_OPTIONS;
-let MAX_INDEX = MIN_INDEX + MAX_OPTIONS;
-console.log('MAX_INDEX', MAX_INDEX);
+const OPTIONS = 10;
+let MIN_INDEX = optionsArrayLength - OPTIONS;
+let MAX_INDEX = MIN_INDEX + OPTIONS;
+let initialMinIndex = MIN_INDEX;
 const input = document.getElementById('inputField');
 const dropdownContent = document.getElementById('dropdown-content');
 let i = MIN_INDEX;
@@ -58,7 +58,7 @@ let renderList = (selected) =>
     if (index >= MIN_INDEX && index <= MAX_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
-        `<li value=${element}    class="displayed dropdown-item ${
+        `<li value=${element} class="displayed dropdown-item ${
           selected.toString() === element.toString()
             ? 'highlighted style="background-color:blue"'
             : ''
@@ -117,18 +117,27 @@ const handleArrowKeys = () => {
   let selectedValue = finalDropdownOptions[i];
   highlighter(selectedValue, i, false);
 
+  const dropDownMinValues = () => {
+    if (optionsArrayLength - i < OPTIONS) {
+      MIN_INDEX = initialMinIndex;
+    } else {
+      MIN_INDEX = i;
+    }
+
+    return MIN_INDEX;
+  };
   //Handle arrow keys
   document.onkeydown = (event) => {
     if (event.key === 'ArrowUp' && i > 0) {
       i = i - 1;
-      MIN_INDEX = i;
-      MAX_INDEX = i + MAX_OPTIONS;
+      dropDownMinValues();
+      MAX_INDEX = MIN_INDEX + OPTIONS;
       highlighter(selectedValue, i, false);
     }
     if (event.key === 'ArrowDown' && i < optionsArrayLength - 1) {
       i = i + 1;
-      MIN_INDEX = i;
-      MAX_INDEX = i + MAX_OPTIONS;
+      dropDownMinValues();
+      MAX_INDEX = i + OPTIONS;
       highlighter(selectedValue, i, false);
     }
   };
