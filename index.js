@@ -54,7 +54,6 @@ let selected = '';
 let renderList = (selected) =>
   optionsArray.map((element, index) => {
     lastItems = optionsArray.slice(MIN_INDEX, MAX_INDEX);
-    console.log(lastItems);
     if (index >= MIN_INDEX && index <= MAX_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
@@ -142,8 +141,6 @@ const handleArrowKeys = () => {
     }
   };
 };
-console.log('called from magic function', finalDropdownOptions);
-console.log('li', document.querySelectorAll('.dropdown-item'));
 
 input.addEventListener('focusin', () => handleArrowKeys());
 input.addEventListener('focusout', () => {
