@@ -1,34 +1,31 @@
 const optionsArray = [
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23,
-  24,
-  25,
-  26,
-  'baba',
-  28,
-  29,
-  30,
+  'A - Alpha',
+  'B - Bravo',
+  'C - Charlie',
+  'D - Delta',
+  'E - Echo',
+  'F - Foxtrot',
+  'G - Golf	',
+  'H - Hotel',
+  'I - India',
+  'J - Juliet',
+  'K - Kilo',
+  'L - Lima',
+  'M - Mike',
+  'N - November',
+  'O - Oscar',
+  'P - Papa',
+  'Q - Quebec',
+  'R - Romeo',
+  'S - Sierra',
+  'T - Tango',
+  'U - Uniform',
+  'V - Victor',
+  'W - Whiskey',
+  'X - X-ray',
+  'Y - Yankee',
+  'Z - Zulu',
+  '9 - Niner',
 ];
 
 const optionsArrayLength = optionsArray.length;
@@ -57,17 +54,15 @@ let renderList = (selected) =>
     if (index >= MIN_INDEX && index <= MAX_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
-        `<li value=${element} class="displayed dropdown-item ${
-          selected.toString() === element.toString()
-            ? 'highlighted style="background-color:blue"'
-            : ''
+        `<li value="${element}" class="displayed dropdown-item ${
+          selected.toString() === element.toString() ? 'highlighted' : ''
         }"> ${element}</li>`,
       ];
     }
     if (index < MIN_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
-        `<li value=${element} class="not-displayed dropdown-item"> ${element} </li>`,
+        `<li value="${element}" class="not-displayed dropdown-item"> ${element} </li>`,
       ];
     }
     return finalDropdownOptions;
@@ -114,6 +109,7 @@ const highlighter = (selectedValue, i, focusedOut) => {
 const handleArrowKeys = () => {
   //Highlight the top element from dropdown once the input has been focused
   let selectedValue = finalDropdownOptions[i];
+  console.log('selectedValue', selectedValue);
   highlighter(selectedValue, i, false);
 
   const dropDownMinValues = () => {
