@@ -5,7 +5,7 @@ const optionsArray = [
   'D - Delta',
   'E - Echo',
   'F - Foxtrot',
-  'G - Golf	',
+  'G - Golf',
   'H - Hotel',
   'I - India',
   'J - Juliet',
@@ -34,12 +34,13 @@ const OPTIONS = 10;
 let MIN_INDEX = optionsArrayLength - OPTIONS;
 let MAX_INDEX = MIN_INDEX + OPTIONS;
 let initialMinIndex = MIN_INDEX;
+let i = MIN_INDEX;
 const input = document.getElementById('inputField');
 const dropdownContent = document.getElementById('dropdown-content');
-let i = MIN_INDEX;
 let lastItems;
-
+let availableValues = [];
 let finalDropdownOptions = [];
+
 let stringToHTML = (str) => {
   let parser = new DOMParser();
   let doc = parser.parseFromString(str, 'text/html');
@@ -54,7 +55,7 @@ let renderList = (selected) =>
     if (index >= MIN_INDEX && index <= MAX_INDEX) {
       finalDropdownOptions = [
         ...finalDropdownOptions,
-        `<li value="${element}" class="displayed dropdown-item ${
+        `<li value="${element}" class="displayed dropdown-item  ${
           selected.toString() === element.toString() ? 'highlighted' : ''
         }"> ${element}</li>`,
       ];
@@ -92,9 +93,9 @@ dropdownList.forEach((element, i, arr) =>
 const displayedOptions = Array.from(document.querySelectorAll('.displayed'));
 
 //Highlight and update input field with the selected value
-const highlighter = (selectedValue, i, focusedOut) => {
+const highlighter = (selectedValue, i, isFocusedOut) => {
   selectedValue = stringToHTML(finalDropdownOptions[i]).getAttribute('value');
-  if (focusedOut === false) {
+  if (isFocusedOut === false) {
     input.value = selectedValue;
   }
   finalDropdownOptions = [];
@@ -109,7 +110,6 @@ const highlighter = (selectedValue, i, focusedOut) => {
 const handleArrowKeys = () => {
   //Highlight the top element from dropdown once the input has been focused
   let selectedValue = finalDropdownOptions[i];
-  console.log('selectedValue', selectedValue);
   highlighter(selectedValue, i, false);
 
   const dropDownMinValues = () => {
@@ -121,7 +121,8 @@ const handleArrowKeys = () => {
 
     return MIN_INDEX;
   };
-  //Handle arrow keys
+
+  //Handle up and down arrow keys
   document.onkeydown = (event) => {
     if (event.key === 'ArrowUp' && i > 0) {
       i = i - 1;
@@ -135,10 +136,34 @@ const handleArrowKeys = () => {
       MAX_INDEX = i + OPTIONS;
       highlighter(selectedValue, i, false);
     }
+    console.log('MIN_INDEX', MIN_INDEX);
+    console.log('i', i);
+    console.log('MAX_INDEX', MAX_INDEX);
   };
 };
+
+// Function to filter options based on user input
+const filterOptions = (inputValue) => {
+  const options = document.querySelectorAll('li');
+  options.forEach((option, i) => {
+    if (option.textContent.toLowerCase().includes(inputValue.toLowerCase())) {
+      MIN_INDEX = i;
+      MAX_INDEX = MIN_INDEX + OPTIONS;
+      highlighter(inputValue, MIN_INDEX, false);
+    }
+  });
+};
+
+// Add event listener to search input
+input.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    filterOptions(event.target.value);
+  }
+});
 
 input.addEventListener('focusin', () => handleArrowKeys());
 input.addEventListener('focusout', () => {
   highlighter('', 0, true);
 });
+console.log('i', i);

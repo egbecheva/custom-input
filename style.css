@@ -17,7 +17,7 @@
   padding: 12px 16px;
 }
 
-.dropdown:hover .dropdown-content, .showDropdown {
+ .dropdown-content, .showDropdown {
   display: block;
 }
 
@@ -32,4 +32,8 @@
 
 li {
   list-style-type:none;
+}
+
+.hidden { 
+  display: none !important;
 }
