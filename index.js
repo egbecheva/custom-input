@@ -29,16 +29,14 @@ const optionsArray = [
 ];
 
 const optionsArrayLength = optionsArray.length;
-
 const OPTIONS = 10;
 let MIN_INDEX = optionsArrayLength - OPTIONS;
 let MAX_INDEX = MIN_INDEX + OPTIONS;
+let CURRENT_INDEX = MIN_INDEX;
 let initialMinIndex = MIN_INDEX;
-let i = MIN_INDEX;
 const input = document.getElementById('inputField');
 const dropdownContent = document.getElementById('dropdown-content');
 let lastItems;
-let availableValues = [];
 let finalDropdownOptions = [];
 
 let stringToHTML = (str) => {
@@ -56,7 +54,10 @@ let renderList = (selected) =>
       finalDropdownOptions = [
         ...finalDropdownOptions,
         `<li value="${element}" class="displayed dropdown-item  ${
-          selected.toString() === element.toString() ? 'highlighted' : ''
+          selected.toString().replace(/\s/g, '') ===
+          element.toString().replace(/\s/g, '')
+            ? 'highlighted'
+            : ''
         }"> ${element}</li>`,
       ];
     }
@@ -79,7 +80,7 @@ const appendInputOptions = (arr) => {
 //Add options to html file
 appendInputOptions(htmlList);
 
-//Update input value with the selected one from the dropdown list
+//Update input value with the one hovered over from the dropdown list
 const handleMouseOver = (element) => {
   let selectedValue = element.getAttribute('value');
   input.value = selectedValue;
@@ -94,14 +95,14 @@ const displayedOptions = Array.from(document.querySelectorAll('.displayed'));
 
 //Highlight and update input field with the selected value
 const highlighter = (selectedValue, i, isFocusedOut) => {
-  selectedValue = stringToHTML(finalDropdownOptions[i]).getAttribute('value');
+  finalDropdownOptions[i] = options[i];
+  selectedValue = options[i].textContent;
   if (isFocusedOut === false) {
     input.value = selectedValue;
   }
   finalDropdownOptions = [];
   document.querySelectorAll('.dropdown-item').forEach((e) => e.remove());
-  selected = selectedValue;
-  renderList(selected);
+  renderList(selectedValue);
   const htmlList = finalDropdownOptions.join('');
   appendInputOptions(htmlList);
 };
@@ -109,14 +110,15 @@ const highlighter = (selectedValue, i, isFocusedOut) => {
 //Handle arrow keys
 const handleArrowKeys = () => {
   //Highlight the top element from dropdown once the input has been focused
-  let selectedValue = finalDropdownOptions[i];
-  highlighter(selectedValue, i, false);
+  let selectedValue = finalDropdownOptions[CURRENT_INDEX];
+  highlighter(selectedValue, CURRENT_INDEX, false);
 
+  //Calculate the minimal index for the element to be shown on the dropdownlist
   const dropDownMinValues = () => {
-    if (optionsArrayLength - i < OPTIONS) {
+    if (optionsArrayLength - CURRENT_INDEX < OPTIONS) {
       MIN_INDEX = initialMinIndex;
     } else {
-      MIN_INDEX = i;
+      MIN_INDEX = CURRENT_INDEX;
     }
 
     return MIN_INDEX;
@@ -124,32 +126,33 @@ const handleArrowKeys = () => {
 
   //Handle up and down arrow keys
   document.onkeydown = (event) => {
-    if (event.key === 'ArrowUp' && i > 0) {
-      i = i - 1;
+    if (event.key === 'ArrowUp' && CURRENT_INDEX > 0) {
+      CURRENT_INDEX = CURRENT_INDEX - 1;
       dropDownMinValues();
       MAX_INDEX = MIN_INDEX + OPTIONS;
-      highlighter(selectedValue, i, false);
+      highlighter(selectedValue, CURRENT_INDEX, false);
     }
-    if (event.key === 'ArrowDown' && i < optionsArrayLength - 1) {
-      i = i + 1;
+    if (event.key === 'ArrowDown' && CURRENT_INDEX < optionsArrayLength - 1) {
+      CURRENT_INDEX = CURRENT_INDEX + 1;
       dropDownMinValues();
-      MAX_INDEX = i + OPTIONS;
-      highlighter(selectedValue, i, false);
+      MAX_INDEX = CURRENT_INDEX + OPTIONS;
+      highlighter(selectedValue, CURRENT_INDEX, false);
     }
-    console.log('MIN_INDEX', MIN_INDEX);
-    console.log('i', i);
-    console.log('MAX_INDEX', MAX_INDEX);
   };
 };
 
+const options = document.querySelectorAll('li');
 // Function to filter options based on user input
 const filterOptions = (inputValue) => {
-  const options = document.querySelectorAll('li');
   options.forEach((option, i) => {
     if (option.textContent.toLowerCase().includes(inputValue.toLowerCase())) {
       MIN_INDEX = i;
+      CURRENT_INDEX = i;
+      if (MIN_INDEX + OPTIONS > optionsArrayLength) {
+        MAX_INDEX = optionsArrayLength;
+      }
       MAX_INDEX = MIN_INDEX + OPTIONS;
-      highlighter(inputValue, MIN_INDEX, false);
+      highlighter(inputValue, CURRENT_INDEX, false);
     }
   });
 };
@@ -166,4 +169,3 @@ input.addEventListener('focusin', () => handleArrowKeys());
 input.addEventListener('focusout', () => {
   highlighter('', 0, true);
 });
-console.log('i', i);
