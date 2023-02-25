@@ -34,7 +34,7 @@ let MIN_INDEX = optionsArrayLength - OPTIONS;
 let MAX_INDEX = MIN_INDEX + OPTIONS;
 let CURRENT_INDEX = MIN_INDEX;
 let initialMinIndex = MIN_INDEX;
-const input = document.getElementById('inputField');
+const input = document.getElementById('input-field');
 const dropdownContent = document.getElementById('dropdown-content');
 let lastItems;
 let finalDropdownOptions = [];
