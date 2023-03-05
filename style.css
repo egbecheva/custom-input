@@ -49,7 +49,9 @@ input:focus{
 }
 
 .dropdown-item:hover {
-  background-color:gray
+  background-color:gray;
+  border-radius: 5px;
+  padding:2px
 }
 
 .highlighted{
